@@ -1,6 +1,6 @@
 // src/server/trpc/index.ts
 import { createTRPCRouter } from './trpc';
-// Import feature routers here (e.g., import { chatRouter } from './routers/chat';)
+import { chatRouter } from './routers/chat';
 
 /**
  * This is the primary router for your server.
@@ -8,7 +8,7 @@ import { createTRPCRouter } from './trpc';
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  // chat: chatRouter, // Add feature routers here
+  chat: chatRouter, // Add chat router
   // example: exampleRouter, // Placeholder
 });
 
