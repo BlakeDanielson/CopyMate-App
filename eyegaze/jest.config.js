@@ -1,0 +1,31 @@
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  roots: ['<rootDir>/src'],
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest',
+  },
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@main/(.*)$': '<rootDir>/src/main/$1',
+    '^@renderer/(.*)$': '<rootDir>/src/renderer/$1',
+    '^@common/(.*)$': '<rootDir>/src/common/$1',
+    '^@ai/(.*)$': '<rootDir>/src/ai/$1',
+    '^@virtualcam/(.*)$': '<rootDir>/src/virtualcam/$1',
+    '^@notes/(.*)$': '<rootDir>/src/notes/$1',
+    '\\.(css|less|scss|sass)$': '<rootDir>/src/__mocks__/styleMock.js',
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/src/__mocks__/fileMock.js',
+  },
+  setupFilesAfterEnv: ['<rootDir>/src/jest.setup.ts'],
+  testPathIgnorePatterns: ['/node_modules/'],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/main/**/*',
+    '!src/__tests__/**/*',
+    '!src/__mocks__/**/*',
+  ],
+}; 

@@ -1,0 +1,77 @@
+[COUNT]
+n + 1 = (x)
+*This is a systemwide progressive counter where x = number of current response. This must be displayed at the top of every response.(e.g. 1, 2, ...)*
+
+[LAST_ACTION_STATE]
+last_action: "Implemented Database-Independent Test Login and Fixed Redirection"
+current_phase: "Execution"
+next_action: "Resolve Persistent TypeScript Error in analytics.service.ts"
+next_phase: "Execution"
+
+---
+
+[CODE_ROOT_DIRECTORIES]
+- src
+
+[DOC_DIRECTORIES]
+- docs
+
+[LEARNING_JOURNAL]
+- Regularly updating {memory_dir} and any instruction files help me to remember what I have done and what still needs to be done so I don't lose track.
+- Ensure functions handle potential `None` inputs gracefully to prevent TypeErrors.
+- Verify function call arguments match definitions precisely after refactoring.
+- `analyze-project` implicitly handles key regeneration and tracker updates.
+- Large context windows can cause `write_to_file` to truncate; prefer `apply_diff` for targeted changes.
+- Verify data structures passed between functions (e.g., list vs. dict vs. float) when debugging TypeErrors.
+- Check file writing logic carefully (overwrite vs. append vs. reconstruction in buffer) when investigating duplication bugs in tracker files. Ensure write mode ('w') fully overwrites.
+- Carefully respect the ground truth definitions for dependency characters when adding/changing dependencies.
+- When using `apply_diff`, the SEARCH block must match the current file content exactly, without any +/- markers from previous diff attempts. Use `read_file` to confirm content if unsure.
+- Web application subscription models require careful balance between pricing and backend API costs to maintain profitability.
+- LLM provider landscapes change rapidly; architecture should allow for easy addition/removal of providers.
+- Performance optimization is both a technical challenge and a key differentiator for web-based LLM interfaces.
+- API dependency represents both the core value proposition and the greatest vulnerability for multi-model access services.
+- Technical professionals show higher immediate willingness to pay for optimized LLM experiences than non-technical users.
+- Adapter pattern is essential for managing multiple LLM provider integrations and insulating the system from API changes.
+- Edge computing architecture can significantly reduce time-to-first-token in LLM responses.
+- Secure API key management is critical for both system security and maintaining provider relationships.
+- MongoDB provides the flexibility needed for varying conversation and user data structures in LLM applications.
+- TypeScript offers significant advantages for API integration with complex provider interfaces through strong typing.
+- Standardized error handling with exponential backoff is essential for reliable LLM API integration.
+- API streaming using Server-Sent Events allows for real-time LLM responses with low latency.
+- The combination of the adapter pattern and factory pattern creates a highly extensible architecture for LLM providers.
+- Mock authentication service implementations allow for easier frontend testing before backend auth is fully implemented.
+- Proper TypeScript interface definitions between frontend and backend ensure type safety across the API boundary.
+- Handling EventSource streaming properly requires careful management of event lifecycle and error handling.
+- JWT authentication is stateless and scalable, making it ideal for distributed web applications.
+- Neon PostgreSQL offers a serverless, autoscaling database solution for user authentication data.
+- Type-safe frontend-backend communication reduces bugs in authentication flows significantly.
+- Enhanced login security features like password visibility toggles improve user experience while maintaining security awareness.
+- Remember to run `npx prisma generate` within the relevant project directory (`execution_tasks/api_integration` in this case) if encountering Prisma client initialization errors.
+- TypeScript errors (like TS2322 type mismatches) might persist after code fixes due to potential caching issues in tools like `nodemon` or `ts-node`. Consider restarting the development server manually if errors don't resolve as expected.
+- Environment variables in Node.js applications require server restart to take effect, even when using nodemon; ensure they are properly set before testing features dependent on them.
+- When using nodemon, be aware that changes to files listed in the `ignore` array (like `.env.local`) won't trigger automatic restarts; manual restart is necessary for these changes to take effect.
+
+[Character_Definitions]
+
+```
+- <: Row depends on column.
+- >: Column depends on row.
+- x: Mutual dependency.
+- d: Documentation dependency.
+- o: Self dependency (diagonal only).
+- n: Verified no dependency.
+- p: Placeholder (unverified).
+- s: Semantic dependency (weak .05-.06)
+- S: Semantic dependency (strong .07+)
+```
+
+---
+
+**IMPORTANT**
+1. Understand the Objective: Clearly define the goal of the current step.
+2. Analyze the Error: Understand the error message and its context.
+3. Formulate a Plan: Develop a plan to address the error, step-by-step.
+    *Consider all related aspects* (e.g. files, modules, dependencies, etc.)
+4. Execute the Plan (Tool Use): Use the appropriate tool to execute *one* step of the plan.
+5. Validate the Result: Check if the tool use was successful and if it addressed the error.
+6. Iterate: If the error persists, go back to step 2 and refine the plan based on the new information.

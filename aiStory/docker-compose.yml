@@ -1,0 +1,80 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: story_creator_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password # Use secrets in real setup
+    ports:
+      - "5432:5432" # Map only if needed locally outside Docker
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./backend # Points to the directory with Dockerfile
+    command: python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app # Mount local code for hot-reloading
+      - storage_data:/app/storage # Shared volume for photo storage
+    ports:
+      - "8000:8000"
+    environment:
+      AISTORY_DATABASE_URL: postgresql+asyncpg://user:password@db:5432/story_creator_db
+      PYTHONPATH: /app
+      AISTORY_DEBUG: "true"  # Enable debug mode
+      AISTORY_CELERY_BROKER_URL: redis://redis:6379/0
+      AISTORY_CELERY_RESULT_BACKEND: redis://redis:6379/0
+      AISTORY_STORAGE_LOCAL_PATH: /app/storage
+      AISTORY_AI_PROVIDER_TYPE: local
+    depends_on:
+      - db
+      - redis
+
+  celery-worker:
+    build: ./backend
+    command: celery -A backend.services.tasks.celery_app:celery_app worker --loglevel=info
+    volumes:
+      - ./backend:/app
+      - storage_data:/app/storage # Shared volume for photo storage
+    environment:
+      PYTHONPATH: /app
+      AISTORY_DATABASE_URL: postgresql+asyncpg://user:password@db:5432/story_creator_db
+      AISTORY_CELERY_BROKER_URL: redis://redis:6379/0
+      AISTORY_CELERY_RESULT_BACKEND: redis://redis:6379/0
+      AISTORY_STORAGE_LOCAL_PATH: /app/storage
+      AISTORY_AI_PROVIDER_TYPE: local
+    depends_on:
+      - db
+      - redis
+      - backend
+
+  celery-flower:
+    build: ./backend
+    command: celery -A backend.services.tasks.celery_app:celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      PYTHONPATH: /app
+      AISTORY_CELERY_BROKER_URL: redis://redis:6379/0
+      AISTORY_CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - redis
+      - celery-worker
+
+volumes:
+  postgres_data:
+  redis_data:
+  storage_data:  # Shared volume for photo storage between backend and workers

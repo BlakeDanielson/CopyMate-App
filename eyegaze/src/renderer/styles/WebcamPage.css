@@ -1,0 +1,82 @@
+.webcam-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.webcam-page h1 {
+  text-align: center;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.webcam-page p {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #666;
+}
+
+.webcam-stats {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.webcam-stats h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #2c3e50;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.webcam-info {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.webcam-info h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  color: #2c3e50;
+}
+
+.webcam-info ul {
+  margin-left: 24px;
+}
+
+.webcam-info li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+} 

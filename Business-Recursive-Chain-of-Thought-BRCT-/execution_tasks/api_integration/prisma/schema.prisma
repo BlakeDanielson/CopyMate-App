@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String           @id @default(uuid())
+  email             String           @unique
+  passwordHash      String
+  username          String?
+  fullName          String?
+  role              Role             @default(USER)
+  messageCount      Int              @default(0)
+  stripeCustomerId  String?          // Stripe customer ID
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  conversations     Conversation[]
+  subscription      UserSubscription?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model SubscriptionPlan {
+  id                String            @id @default(uuid())
+  name              String            @unique
+  description       String?
+  price             Int               // Price in cents (e.g., $5.00 = 500)
+  currency          String            @default("usd")
+  interval          PlanInterval      @default(MONTH)
+  messageQuota      Int               // Number of messages included (e.g., 1000)
+  stripePriceId     String?           // Stripe price ID
+  isActive          Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  subscriptions     UserSubscription[]
+}
+
+enum PlanInterval {
+  MONTH
+  YEAR
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  PAST_DUE
+  CANCELED
+  TRIAL
+}
+
+model UserSubscription {
+  id                String            @id @default(uuid())
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String            @unique // One subscription per user
+  plan              SubscriptionPlan  @relation(fields: [planId], references: [id])
+  planId            String
+  status            SubscriptionStatus @default(INACTIVE)
+  currentPeriodStart DateTime?
+  currentPeriodEnd  DateTime?
+  stripeSubscriptionId String?         // Stripe subscription ID
+  cancelAtPeriodEnd Boolean           @default(false)
+  remainingQuota    Int?              // Remaining messages in current period
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model Conversation {
+  id          String    @id @default(uuid())
+  title       String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  messages    Message[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Message {
+  id            String      @id @default(uuid())
+  conversation  Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  role          MessageRole
+  content       String
+  modelUsed     String?
+  parameters    Json?
+  createdAt     DateTime    @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+model ApiPerformanceLog {
+  id           String    @id @default(uuid())
+  endpoint     String    // The API endpoint path
+  method       String    // HTTP method (GET, POST, etc.)
+  statusCode   Int       // HTTP status code
+  responseTime Int       // Response time in ms
+  userId       String?   // Optional reference to the user who made the request
+  timestamp    DateTime  @default(now())
+  metadata     Json?     // Additional metadata (e.g., query params, headers)
+}
+
+model LlmPerformanceLog {
+  id                String    @id @default(uuid())
+  provider          String    // LLM provider (e.g., "openai", "anthropic", "gemini")
+  model             String    // Specific model used
+  operation         String    // Operation type (e.g., "completion", "chat")
+  timeToFirstToken  Int?      // Time to first token in ms (null if not streaming)
+  totalDuration     Int       // Total duration in ms
+  tokenCount        Int?      // Number of tokens processed (if available)
+  success           Boolean   // Whether the request was successful
+  errorCode         String?   // Error code if unsuccessful
+  errorMessage      String?   // Error message if unsuccessful
+  userId            String?   // Optional reference to the user who made the request
+  timestamp         DateTime  @default(now())
+  metadata          Json?     // Additional metadata (e.g., prompt length, parameters)
+}
+
+model PerformanceAggregate {
+  id              String    @id @default(uuid())
+  metricType      String    // E.g., "api_avg_response", "llm_avg_ttft"
+  metricTarget    String    // E.g., endpoint name, provider+model
+  timeWindow      String    // E.g., "hourly", "daily"
+  timestamp       DateTime  // The start time of the window
+  value           Float     // The metric value
+  sampleCount     Int       // Number of samples in this aggregate
+  p50             Float?    // 50th percentile (median) if applicable
+  p95             Float?    // 95th percentile if applicable
+  p99             Float?    // 99th percentile if applicable
+  metadata        Json?     // Additional metadata
+}
