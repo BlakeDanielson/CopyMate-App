@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH, Duration};
 use std::thread;
-use tauri::{State, AppHandle, Manager, Emitter};
+use tauri::{State, AppHandle, Emitter};
 use tauri_plugin_clipboard_manager::ClipboardExt;
 use serde::{Deserialize, Serialize};
 

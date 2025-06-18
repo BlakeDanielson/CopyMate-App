@@ -80,53 +80,55 @@ function App() {
 
   return (
     <div className="app">
-      <div className="header">
-        <h3>CopyMate</h3>
-        <span className="count">{clipboardHistory.length} items</span>
-      </div>
-      
-      <div className="clipboard-list">
-        {clipboardHistory.length === 0 ? (
-          <div className="empty-state">
-            <p>No clipboard history yet</p>
-            <small>Copy something to get started</small>
-          </div>
-        ) : (
-          clipboardHistory.map((item) => (
-            <div
-              key={item.id}
-              className={`clipboard-item ${selectedId === item.id ? 'selected' : ''}`}
-              onClick={() => copyToClipboard(item.content, item.id)}
-              title={item.content} // Show full content on hover
-            >
-              <div className="item-content">
-                {truncateText(item.content)}
-              </div>
-              <div className="item-time">
-                {formatTime(item.timestamp)}
-              </div>
+      <div className="app-content">
+        <div className="header">
+          <h3>CopyMate</h3>
+          <span className="count">{clipboardHistory.length} items</span>
+        </div>
+        
+        <div className="clipboard-list">
+          {clipboardHistory.length === 0 ? (
+            <div className="empty-state">
+              <p>No clipboard history yet</p>
+              <small>Copy something to get started</small>
             </div>
-          ))
+          ) : (
+            clipboardHistory.map((item) => (
+              <div
+                key={item.id}
+                className={`clipboard-item ${selectedId === item.id ? 'selected' : ''}`}
+                onClick={() => copyToClipboard(item.content, item.id)}
+                title={item.content} // Show full content on hover
+              >
+                <div className="item-content">
+                  {truncateText(item.content)}
+                </div>
+                <div className="item-time">
+                  {formatTime(item.timestamp)}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {clipboardHistory.length > 0 && (
+          <div className="footer">
+            <button 
+              className="clear-btn"
+              onClick={async () => {
+                try {
+                  await invoke("clear_clipboard_history");
+                  loadClipboardHistory();
+                } catch (error) {
+                  console.error("Failed to clear history:", error);
+                }
+              }}
+            >
+              Clear All
+            </button>
+          </div>
         )}
       </div>
-
-      {clipboardHistory.length > 0 && (
-        <div className="footer">
-          <button 
-            className="clear-btn"
-            onClick={async () => {
-              try {
-                await invoke("clear_clipboard_history");
-                loadClipboardHistory();
-              } catch (error) {
-                console.error("Failed to clear history:", error);
-              }
-            }}
-          >
-            Clear All
-          </button>
-        </div>
-      )}
     </div>
   );
 }

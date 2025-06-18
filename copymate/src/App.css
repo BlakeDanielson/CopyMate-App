@@ -5,19 +5,37 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   font-size: 13px;
   line-height: 1.4;
   color: #333;
-  background: transparent;
+  background: transparent !important;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#root {
+  background: transparent !important;
+  height: 100%;
 }
 
 /* Main app container - compact utility window */
 .app {
   width: 280px;
-  max-height: 400px;
+  height: 100vh;
+  background: transparent !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+/* App content with background covering full window */
+.app-content {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -26,6 +44,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  flex: 1;
+  min-height: 100%;
 }
 
 /* Header */
@@ -54,11 +74,12 @@ body {
   border-radius: 10px;
 }
 
-/* Clipboard list */
+/* Clipboard list - flexible height with scrolling */
 .clipboard-list {
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  /* No background - let items define the space */
 }
 
 /* Scrollbar styling */
@@ -81,9 +102,13 @@ body {
 
 /* Empty state */
 .empty-state {
-  padding: 40px 20px;
+  padding: 20px;
   text-align: center;
   color: #999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .empty-state p {
@@ -101,7 +126,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: all 0.15s ease;
@@ -138,12 +163,13 @@ body {
   flex-shrink: 0;
 }
 
-/* Footer */
+/* Footer - fixed at bottom */
 .footer {
   padding: 6px 12px;
   background: rgba(0, 0, 0, 0.02);
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
+  margin-top: auto;
 }
 
 .clear-btn {
@@ -174,7 +200,7 @@ body {
     color: #e0e0e0;
   }
   
-  .app {
+  .app-content {
     background: rgba(40, 40, 40, 0.95);
     border-color: rgba(255, 255, 255, 0.1);
   }

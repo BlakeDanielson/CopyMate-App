@@ -14,11 +14,11 @@
       {
         "title": "CopyMate",
         "width": 280,
-        "height": 400,
+        "height": 180,
         "resizable": false,
         "alwaysOnTop": true,
-        "decorations": false,
-        "transparent": true
+        "decorations": true,
+        "transparent": false
       }
     ],
     "security": {
