@@ -15,7 +15,7 @@ A simple, lightweight clipboard manager for macOS built with Tauri, React, and T
 
 ### For End Users
 
-**[Download CopyMate v0.1.0 DMG](https://github.com/BlakeDanielson/CopyMate/releases/tag/v0.1.0)**
+**[Download CopyMate v0.1.0 DMG](https://github.com/BlakeDanielson/CopyMate-App/releases/tag/v0.1.0)**
 
 1. Download the DMG file from the release page
 2. Open the downloaded DMG file
@@ -38,8 +38,8 @@ A simple, lightweight clipboard manager for macOS built with Tauri, React, and T
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/BlakeDanielson/CopyMate.git
-cd CopyMate
+git clone https://github.com/BlakeDanielson/CopyMate-App.git
+cd CopyMate-App
 
 # Install dependencies
 npm install
